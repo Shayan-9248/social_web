@@ -43,6 +43,9 @@ INSTALLED_APPS = [
     'core.apps.CoreConfig',
     'accounts.apps.AccountsConfig',
     'post.apps.PostConfig',
+
+    # Third-Party App
+    'crispy_forms',
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
@@ -126,3 +129,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# Crispy Forms
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

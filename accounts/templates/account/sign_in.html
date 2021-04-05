@@ -1,0 +1,17 @@
+{% extends 'base/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %} sign-in {% endblock %}
+
+
+{% block content %}
+    <div class="col-4">
+        <form method="post" novalidate>
+            {% csrf_token %}
+            {{ form.username|as_crispy_field }}
+            {{ form.password|as_crispy_field }}
+            {{ form.remember|as_crispy_field }}
+            <button type="submit" class="btn btn-outline-primary">sign-in</button>
+        </form>
+    </div>
+{% endblock %}
