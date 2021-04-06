@@ -1,0 +1,15 @@
+{% extends 'base/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %} {{ user.username|capfirst }} Dashboard {% endblock %}
+
+
+{% block content %}
+    <h3 style="text-align: center;">{{ user.username|capfirst }}</h3>
+    {% for post in posts %}
+        <div class="card">
+            <p class="card-header"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a> - {{ post.created|date }}</p>
+            <p class="card-body">{{ post.description|truncatewords:20 }}</p>
+        </div>
+    {% endfor %}
+{% endblock %}

@@ -15,6 +15,8 @@ class Post(TimeStamp):
     slug = models.SlugField(unique=True, null=True, blank=True)
     description = models.TextField()
     image = models.ImageField(default='1.jpg')
+    like = models.ManyToManyField(User, blank=True, related_name='like')
+    dislike = models.ManyToManyField(User, blank=True, related_name='dislike')
 
     def __str__(self):
         return f'{self.user} - {self.title[:20]}'
