@@ -55,7 +55,7 @@ def user_dashboard(request, user_id):
         is_following = True
     context = {
         'user': user, 'posts': posts,
-        'is_following': is_following
+        'is_following': is_following,
     }
     return render(request, 'account/dashboard.html', context)
 
