@@ -9,10 +9,16 @@
         <a href="{% url 'post:create' %}" class="btn btn-outline-info btn-sm">Create</a>
     {% endif %}
     <h3 style="text-align: center;">{{ user.username|capfirst }}</h3>
-    {% if request.user.is_authenticated and request.user.id != user.id and not is_following %}
-        <a href="{% url 'account:follow' user.id %}" class="btn btn-outline-primary text-center mx-auto" style="display: block; width: 5% !important;">Follow</a><br>
-    {% elif request.user.is_authenticated and request.user.id != user.id and is_following %}
-        <a href="{% url 'account:unfollow' user.id %}" class="btn btn-outline-warning text-center mx-auto" style="display: block; width: 5% !important;">UnFollow</a><br>
+    {% if request.user.id != user.id and not is_following %}
+        <form method="POST" action="{% url 'account:follow' user.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-primary text-center mx-auto" style="display: block; width: 5% !important;">Follow</button><br>
+        </form>
+    {% elif request.user.id != user.id and is_following %}
+        <form method="POST" action="{% url 'account:unfollow' user.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-warning text-center mx-auto" style="display: block; width: 5% !important;">UnFollow</button><br>
+        </form>
     {% endif %}
     {% for post in posts %}
         <div class="card">

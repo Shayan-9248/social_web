@@ -65,28 +65,30 @@ def user_dashboard(request, user_id):
 @login_required(login_url='account:sign-in')
 def follow(request, user_id):
     url = request.META.get('HTTP_REFERER')
+    user = get_object_or_404(User, id=user_id)
     if request.method == 'POST':
-        # user_id = user_id
-        following = get_object_or_404(User, user_id=user_id)
+        # user_id = id
+        following = get_object_or_404(User, id=user_id)
         check_relation = Relation.objects.filter(from_user=request.user, to_user=following)
         if check_relation.exists():
             messages.error(request, 'already following', 'danger')
         else:
             Relation.objects.create(from_user=request.user, to_user=following)
-            messages.error(request, 'following', 'danger')
+            messages.success(request, f'you following {user}', 'primary')
     return redirect(url)
 
 
 @login_required(login_url='account:sign-in')
 def unfollow(request, user_id):
     url = request.META.get('HTTP_REFERER')
+    user = get_object_or_404(User, id=user_id)
     if request.method == 'POST':
-        # user_id = user_id
-        following = get_object_or_404(User, user_id=user_id)
-        check_relation = Relation.objects.filter(from_user=request.user, to_user=user)
+        # user_id = id
+        following = get_object_or_404(User, id=user_id)
+        check_relation = Relation.objects.filter(from_user=request.user, to_user=following)
         if check_relation.exists():
             check_relation.delete()
-            messages.error(request, 'Unfollowing', 'primary')
+            messages.error(request, f'you unfollowing {user}', 'danger')
         else:
             messages.error(request, 'not exists', 'danger')
     return redirect(url)
