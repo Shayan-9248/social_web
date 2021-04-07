@@ -1,0 +1,16 @@
+{% extends 'base/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %} Post Create {% endblock %}
+
+
+{% block content %}
+    <div class="col-4">
+        <form method="post" novalidate>
+            {% csrf_token %}
+            {{ form.title|as_crispy_field }}
+            {{ form.description|as_crispy_field }}
+            <button type="submit" class="btn btn-outline-primary">Create</button>
+        </form>
+    </div>
+{% endblock %}

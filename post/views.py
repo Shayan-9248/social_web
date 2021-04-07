@@ -1,6 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.views import View
+from django.urls import reverse_lazy
 from .models import *
 
 
@@ -56,3 +60,17 @@ def post_dislike(request, pk):
     else:
         post.dislike.add(user)
     return redirect(url)
+
+
+class PostCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+    template_name = 'post/create.html'
+    login_url = 'account:sign-in'
+    model = Post
+    fields = ('title', 'description', 'image')
+    success_url = reverse_lazy('post:list')
+    success_message = 'Post created successfully'
+
+    def form_valid(self, form):
+        self.obj = form.save(commit=False)
+        self.obj.user = self.request.user
+        return super().form_valid(form)

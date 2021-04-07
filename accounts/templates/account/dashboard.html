@@ -5,7 +5,15 @@
 
 
 {% block content %}
+    {% if request.user == user %}
+        <a href="{% url 'post:create' %}" class="btn btn-outline-info btn-sm">Create</a>
+    {% endif %}
     <h3 style="text-align: center;">{{ user.username|capfirst }}</h3>
+    {% if request.user.is_authenticated and request.user.id != user.id and not is_following %}
+        <a href="{% url 'account:follow' user.id %}" class="btn btn-outline-primary text-center mx-auto" style="display: block; width: 5% !important;">Follow</a><br>
+    {% elif request.user.is_authenticated and request.user.id != user.id and is_following %}
+        <a href="{% url 'account:unfollow' user.id %}" class="btn btn-outline-warning text-center mx-auto" style="display: block; width: 5% !important;">UnFollow</a><br>
+    {% endif %}
     {% for post in posts %}
         <div class="card">
             <p class="card-header"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a> - {{ post.created|date }}</p>
