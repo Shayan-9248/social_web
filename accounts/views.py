@@ -15,6 +15,8 @@ class SignIn(View):
     form_class = SignInForm
 
     def get(self, request):
+        if request.user.is_authenticated:
+            return redirect('/')
         form = self.form_class()
         return render(request, self.template_name, {'form': form})
 

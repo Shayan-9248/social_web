@@ -86,3 +86,11 @@ class UpdatePost(FormValidMixin, UserAccessMixin, LoginRequiredMixin, SuccessMes
     fields = ('title', 'description', 'image')
     success_url = reverse_lazy('post:list')
     success_message = 'Post updated successfully'
+
+
+class DeletePost(UserAccessMixin, LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+    template_name = 'post/delete.html'
+    ogin_url = 'account:sign-in'
+    model = Post
+    success_url = reverse_lazy('post:list')
+    success_message = 'Post deleted successfully'

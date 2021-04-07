@@ -13,7 +13,7 @@ class FormValidMixin():
 class UserAccessMixin():
     def dispatch(self, request, pk, *args, **kwargs):
         post = get_object_or_404(Post, pk=pk)
-        if request.user == post.user:
+        if request.user == post.user or request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
         else:
             raise Http404('You are not the owner of this post')
