@@ -11,6 +11,6 @@
     <h4 style="text-align: center;">{{ post.user|capfirst }} - {{ post.created|date }}</h4>
     <p style="text-align: center;"><a>{{ post.title }}</a></p>
     <p style="text-align: center;"><a>{{ post.description|linebreaks }}</a></p>
-    <a href="{% url 'post:like' post.pk %}" class="btn btn-outline-primary">Like</a>
-    <a href="{% url 'post:dislike' post.pk %}" class="btn btn-outline-danger">disLike</a>
+    <a href="{% url 'post:like' post.pk %}" class="btn btn-outline-primary">Like</a> &nbsp; {{ post.like_count }}
+    <a href="{% url 'post:dislike' post.pk %}" class="btn btn-outline-danger">disLike</a> &nbsp; {{ post.dislike_count }}
 {% endblock %}

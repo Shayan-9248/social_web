@@ -27,3 +27,9 @@ class Post(TimeStamp):
     
     def get_absolute_url(self):
         return reverse('post:detail', args=[self.slug, self.id])
+
+    def like_count(self):
+        return self.like.count()
+    
+    def dislike_count(self):
+        return self.dislike.count()

@@ -5,6 +5,8 @@
 
 
 {% block content %}
+    <h6>Followers: {{ relation.from_user }}</h6>
+    <h6>Following: </h6>
     {% if request.user == user %}
         <a href="{% url 'post:create' %}" class="btn btn-outline-info btn-sm">Create</a>
     {% endif %}
