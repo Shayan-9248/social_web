@@ -4,6 +4,7 @@
     {% if request.user.is_authenticated %}
       <a class="navbar-brand" href="{% url 'account:log-out' %}">log-out</a>
     {% else %}
+      <a class="navbar-brand" href="{% url 'account:sign-up' %}">sign-up</a>
       <a class="navbar-brand" href="{% url 'account:sign-in' %}">sign-in</a>
     {% endif %}
   </nav>

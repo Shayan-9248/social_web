@@ -1,7 +1,7 @@
 {% extends 'base/base.html' %}
 {% load crispy_forms_tags %}
 
-{% block title %} sign-in page {% endblock %}
+{% block title %} sign-up page {% endblock %}
 
 
 {% block content %}
@@ -9,9 +9,10 @@
         <form method="post" novalidate>
             {% csrf_token %}
             {{ form.username|as_crispy_field }}
+            {{ form.email|as_crispy_field }}
             {{ form.password|as_crispy_field }}
-            {{ form.remember|as_crispy_field }}
-            <button type="submit" class="btn btn-outline-primary">sign-in</button>
+            {{ form.confirm_password|as_crispy_field }}
+            <button type="submit" class="btn btn-outline-info">sign-up</button>
         </form>
     </div>
 {% endblock %}
