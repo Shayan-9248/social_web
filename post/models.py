@@ -9,6 +9,13 @@ class TimeStamp(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
 
+class IPAddress(models.Model):
+    ip_address = models.GenericIPAddressField()
+
+    def __str__(self):
+        return self.ip_address
+
+
 class Post(TimeStamp):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=70)
@@ -17,6 +24,7 @@ class Post(TimeStamp):
     image = models.ImageField(default='1.jpg')
     like = models.ManyToManyField(User, blank=True, related_name='like')
     dislike = models.ManyToManyField(User, blank=True, related_name='dislike')
+    visit_count = models.ManyToManyField(IPAddress, blank=True)
 
     def __str__(self):
         return f'{self.user.username} - {self.title[:20]}'
@@ -33,3 +41,6 @@ class Post(TimeStamp):
     
     def dislike_count(self):
         return self.dislike.count()
+    
+    def sum_visit_count(self):
+        return self.visit_count.count()

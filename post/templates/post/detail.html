@@ -4,12 +4,13 @@
 
 
 {% block content %}
-    {% if request.user == post.user %}
+    {% if request.user.username == post.user.username %}
         <a href="{% url 'post:update' post.pk %}" class="btn btn-outline-primary btn-sm">Update</a>
         <a href="{% url 'post:delete' post.pk %}" class="btn btn-outline-warning btn-sm">Delete</a>
     {% endif %}
-    <h4 style="text-align: center;">{{ post.user|capfirst }} - {{ post.created|date }}</h4>
-    <p style="text-align: center;"><a>{{ post.title }}</a></p>
+    <h4 style="text-align: center;">{{ post.user.username|capfirst }} - {{ post.created|date }}</h4>
+    <h6 style="text-align: center;"><a>{{ post.title }}</a></h6>
+    <small style="text-align: center;">Views: {{ post.sum_visit_count }}</small>
     <p style="text-align: center;"><a>{{ post.description|linebreaks }}</a></p>
     <a href="{% url 'post:like' post.pk %}" class="btn btn-outline-primary">Like</a> &nbsp; {{ post.like_count }}
     <a href="{% url 'post:dislike' post.pk %}" class="btn btn-outline-danger">disLike</a> &nbsp; {{ post.dislike_count }}

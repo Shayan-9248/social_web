@@ -29,6 +29,9 @@ class PostDetail(View):
 
     def get(self, request, slug, id):
         post = get_object_or_404(Post, slug=slug, id=id)
+        ip_address = request.user.ip_address
+        if ip_address not in post.visit_count.all():
+            post.visit_count.add(ip_address)
         return render(request, self.template_name, {'post': post})
 
 
