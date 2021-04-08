@@ -8,7 +8,15 @@ from .models import *
 class UserAdmin(BaseUserAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
-    list_display = ('email', 'username', 'is_active', 'is_admin', 'is_superuser')
+    list_display = (
+        'email', 
+        'username', 
+        'is_active', 
+        'is_admin', 
+        'is_superuser',
+        # 'followers_to_str',
+        # 'followings_to_str',
+    )
     list_filter = ('is_admin',)
     fieldsets = (
         ('user', {'fields': ('email', 'password')}),

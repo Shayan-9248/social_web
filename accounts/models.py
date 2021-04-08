@@ -43,6 +43,8 @@ class User(AbstractBaseUser):
         unique=True,
     )
     username = models.CharField(max_length=40)
+    followers = models.ManyToManyField('Relation', blank=True, related_name='followers')
+    followings = models.ManyToManyField('Relation', blank=True, related_name='followings')
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
@@ -71,6 +73,14 @@ class User(AbstractBaseUser):
     
     def get_all_permissions(self, obj=None):
         return _user_get_permissions(self, obj, 'all')
+    
+    # def followers_to_str(self):
+    #     return '-'.join([followers.from_user for followers in self.followers.all()])
+    # followers_to_str.short_description = 'followers'
+    
+    # def followings_to_str(self):
+    #     return '-'.join([followings.to_user for followings in self.followings.all()])
+    # followings_to_str.short_description = 'followings'
 
 
 class Profile(models.Model):
@@ -90,12 +100,17 @@ post_save.connect(user_profile_save, sender=User)
 
 
 class Relation(models.Model):
-    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='follower')
-    to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')
+    STATUS = (
+        ('a', 'accept'),
+        ('r', 'reject'),
+    )
+    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='follower', null=True, blank=True)
+    to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following', null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=30, choices=STATUS, default=None)
 
     class Meta:
         ordering = ('-created',)
 
     def __str__(self):
-        return f'{self.from_user} following {self.to_user}'
+        return f'{self.from_user.username} following {self.to_user.username}'

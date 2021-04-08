@@ -7,15 +7,19 @@ from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import views as auth_views
 from django.contrib import messages
 from django.http import JsonResponse
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views import View
 from post.models import Post
 from .forms import *
 from .models import *
+# from .mixins import (
+#     # FollowerAcceptMixin
+# )
 
 
 class SignIn(View):
@@ -101,19 +105,22 @@ class Logout(LoginRequiredMixin, View):
         return redirect('/')
 
 
-@login_required(login_url='account:sign-in')
-def user_dashboard(request, user_id):
-    user = get_object_or_404(User, id=user_id)
-    posts = Post.objects.filter(user_id=user.id)
-    is_following = False
-    relation = Relation.objects.filter(from_user=request.user, to_user=user)
-    if relation.exists():
-        is_following = True
-    context = {
-        'user': user, 'posts': posts,
-        'is_following': is_following,
-    }
-    return render(request, 'account/dashboard.html', context)
+class UserDashboard(LoginRequiredMixin, View):
+    template_name = 'account/dashboard.html'
+    login_url = 'account:sign-in'
+
+    def get(self, request, user_id):
+        user = get_object_or_404(User, id=user_id)
+        posts = Post.objects.filter(user_id=user.id)
+        is_following = False
+        relation = Relation.objects.filter(from_user=request.user, to_user=user)
+        if relation.exists():
+            is_following = True
+        context = {
+            'user': user, 'posts': posts,
+            'is_following': is_following,
+        }
+        return render(request, self.template_name, context)
 
 
 @login_required(login_url='account:sign-in')
@@ -121,7 +128,6 @@ def follow(request, user_id):
     url = request.META.get('HTTP_REFERER')
     user = get_object_or_404(User, id=user_id)
     if request.method == 'POST':
-        # user_id = id
         following = get_object_or_404(User, id=user_id)
         check_relation = Relation.objects.filter(from_user=request.user, to_user=following)
         if check_relation.exists():
@@ -137,7 +143,6 @@ def unfollow(request, user_id):
     url = request.META.get('HTTP_REFERER')
     user = get_object_or_404(User, id=user_id)
     if request.method == 'POST':
-        # user_id = id
         following = get_object_or_404(User, id=user_id)
         check_relation = Relation.objects.filter(from_user=request.user, to_user=following)
         if check_relation.exists():
@@ -176,3 +181,22 @@ class ChangePassword(LoginRequiredMixin, View):
         else:
             messages.error(request, 'Please correct the error below.', 'danger')
         return render(request, self.template_name, {'form': form})
+
+
+class PasswordResetView(auth_views.PasswordResetView):
+    template_name = 'account/reset.html'
+    success_url = reverse_lazy('account:done')
+    email_template_name = 'account/link.html'
+
+
+class PasswordDoneView(auth_views.PasswordResetDoneView):
+    template_name = 'account/done.html'
+
+
+class PasswordConfirmView(auth_views.PasswordResetConfirmView):
+    template_name = 'account/confirm.html'
+    success_url = reverse_lazy('account:complete')
+
+
+class PasswordCompleteView(auth_views.PasswordResetCompleteView):
+    template_name = 'account/complete.html'

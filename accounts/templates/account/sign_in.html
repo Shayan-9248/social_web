@@ -13,6 +13,7 @@
             {{ form.password|as_crispy_field }}
             {{ form.remember|as_crispy_field }}
             {{ form.captcha }}<br><br>
+            <a href="{% url 'account:reset' %}">Forgot Password?</a><br>
             <button type="submit" class="btn btn-outline-primary">sign-in</button><br><br>
             <a href="{% provider_login_url 'google' %}" class="btn btn-outline-danger">Google+</a>
             <!-- <a href="{% provider_login_url 'github' %}" class="btn btn-outline-dark">Github+</a> -->
