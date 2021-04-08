@@ -5,6 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
 from django.http import JsonResponse
 from .tokens import account_activation_token
@@ -101,7 +103,6 @@ class Logout(LoginRequiredMixin, View):
 
 @login_required(login_url='account:sign-in')
 def user_dashboard(request, user_id):
-    users = User.objects.filter(id=request.user.id)
     user = get_object_or_404(User, id=user_id)
     posts = Post.objects.filter(user_id=user.id)
     is_following = False
@@ -145,3 +146,33 @@ def unfollow(request, user_id):
         else:
             messages.error(request, 'not exists', 'danger')
     return redirect(url)
+
+
+class UserPanel(LoginRequiredMixin, View):
+    template_name = 'account/user_panel.html'
+    login_url = 'account:sign-in'
+
+    def get(self, request):
+        return render(request, self.template_name)
+
+
+class ChangePassword(LoginRequiredMixin, View):
+    template_name = 'account/change_password.html'
+    login_url = 'account:sign-in'
+    form_class = PasswordChangeForm
+
+    def get(self, request):
+        form = self.form_class(request.user)
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request):
+        url = request.META.get('HTTP_REFERER')
+        form = self.form_class(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user) 
+            messages.success(request, 'Your password was successfully updated!', 'success')
+            return redirect(url)
+        else:
+            messages.error(request, 'Please correct the error below.', 'danger')
+        return render(request, self.template_name, {'form': form})

@@ -12,4 +12,6 @@ urlpatterns = [
     path('dashborad/<int:user_id>/', views.user_dashboard, name='dashboard'),
     path('follow/<int:user_id>/', views.follow, name='follow'),
     path('unfollow/<int:user_id>/', views.unfollow, name='unfollow'),
+    path('user-panel/', views.UserPanel.as_view(), name='user-panel'),
+    path('change-password/', views.ChangePassword.as_view(), name='change-pass'),
 ]

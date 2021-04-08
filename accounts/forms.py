@@ -1,5 +1,6 @@
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
+from django.contrib.auth.forms import UserCreationForm
 from captcha.fields import CaptchaField
 from django import forms
 from .models import User
@@ -53,7 +54,7 @@ class SignInForm(forms.Form):
     captcha = CaptchaField()
 
 
-class SignUpForm(forms.Form):
+class SignUpForm(UserCreationForm):
     username = forms.CharField(error_messages=message, max_length=70, widget=forms.TextInput())
     email = forms.EmailField(error_messages=message, max_length=70, widget=forms.TextInput())
     password = forms.CharField(error_messages={'required': 'This field is required'}, widget=forms.PasswordInput())

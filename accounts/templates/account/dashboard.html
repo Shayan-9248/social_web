@@ -7,7 +7,7 @@
 {% block content %}
     {% if request.user.username == user.username %}
         <a href="{% url 'post:create' %}" class="btn btn-outline-info btn-sm">Create</a>
-    {% endif %}
+    {% endif %}<br>
     <h3 style="text-align: center;">{{ user.username|capfirst }}</h3>
     {% if request.user.id != user.id and not is_following %}
         <form method="POST" action="{% url 'account:follow' user.id %}">
