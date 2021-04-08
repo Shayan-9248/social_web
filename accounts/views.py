@@ -29,9 +29,10 @@ class SignIn(View):
     def post(self, request):
         form = self.form_class(request.POST)
         if form.is_valid():
+            human = True
             data = form.cleaned_data
             remember = form.cleaned_data['remember']
-            user = authenticate(request, username=data['username'], password=data['password'])
+            user = authenticate(request, email=data['email'], password=data['password'])
             if user is not None:
                 login(request, user)
                 if not remember:
@@ -40,7 +41,9 @@ class SignIn(View):
                     request.session.set_expiry(68400)
                 return redirect('/')
             else:
-                form.add_error('username', 'username or password is incorrect')
+                form.add_error('email', 'email address or password is incorrect')
+        else:
+            messages.error(request, 'Invalid recaptcha', 'danger')
         return render(request, self.template_name, {'form': form})
 
 
@@ -56,10 +59,10 @@ class SignUp(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             data = form.cleaned_data
-            user = User.objects.create(username=data['username'], email=data['email'], password=data['password'])
+            user = User.objects.create_user(username=data['username'], email=data['email'], password=data['password'])
             user.is_active = False
             user.save()
-            uidb64 = urlsafe_base64_encode(force_bytes(user))
+            uidb64 = urlsafe_base64_encode(force_bytes(user.id))
             domain = get_current_site(request).domain
             url = reverse('account:active-mail', kwargs={'uidb64': uidb64, 'token': account_activation_token.make_token(user)})
             link = 'http://' + domain + url
@@ -76,13 +79,15 @@ class SignUp(View):
 
 
 class ActiveEmail(View):
-    def _make_hash_value(self, request, uidb64, token):
+    def get(self, request, uidb64, token):
         user_id = force_text(urlsafe_base64_decode(uidb64))
-        user = User.objects.get(id=id)
+        user = User.objects.get(id=user_id)
         if user is not None and account_activation_token.check_token(user, token):
             user.is_active = True
             user.save()
             return redirect('account:sign-in')
+        else:
+            messages.error(request, 'Activation link is invalid', 'error')
 
 
 class Logout(LoginRequiredMixin, View):
@@ -122,7 +127,7 @@ def follow(request, user_id):
             messages.error(request, 'already following', 'danger')
         else:
             Relation.objects.create(from_user=request.user, to_user=following)
-            messages.success(request, f'you following {user}', 'primary')
+            messages.success(request, f'you following {user.username}', 'primary')
     return redirect(url)
 
 
@@ -136,7 +141,7 @@ def unfollow(request, user_id):
         check_relation = Relation.objects.filter(from_user=request.user, to_user=following)
         if check_relation.exists():
             check_relation.delete()
-            messages.error(request, f'you unfollowing {user}', 'danger')
+            messages.error(request, f'you unfollowing {user.username}', 'danger')
         else:
             messages.error(request, 'not exists', 'danger')
     return redirect(url)

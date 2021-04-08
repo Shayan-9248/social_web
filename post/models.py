@@ -19,7 +19,7 @@ class Post(TimeStamp):
     dislike = models.ManyToManyField(User, blank=True, related_name='dislike')
 
     def __str__(self):
-        return f'{self.user} - {self.title[:20]}'
+        return f'{self.user.username} - {self.title[:20]}'
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)

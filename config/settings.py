@@ -47,6 +47,7 @@ INSTALLED_APPS = [
 
     # Third-Party App
     'crispy_forms',
+    'captcha',
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
