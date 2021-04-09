@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.github',
     'admin_honeypot',
+    'star_ratings',
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
@@ -165,3 +166,7 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 LOGIN_REDIRECT_URL = '/'
 SOCIALACCOUNT_QUERY_EMAIL = True
+
+# Star Rating
+STAR_RATINGS_STAR_HEIGHT = 17
+STAR_RATINGS_ANONYMOUS = False

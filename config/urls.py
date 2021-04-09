@@ -10,6 +10,7 @@ urlpatterns = [
     path('', include('post.urls',namespace='post')),
     path('captcha/', include('captcha.urls')),
     path('accounts/', include('allauth.urls')),
+    path('ratings/', include('star_ratings.urls', namespace='ratings')),
 ]
 
 AdminSite.site_header = 'Social Web Admin'
