@@ -107,7 +107,7 @@ class Relation(models.Model):
     from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='follower', null=True, blank=True)
     to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following', null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=30, choices=STATUS, default=None)
+    status = models.CharField(max_length=30, choices=STATUS, blank=True)
 
     class Meta:
         ordering = ('-created',)
