@@ -3,7 +3,8 @@ from django.contrib.admin.sites import AdminSite
 from django.urls import path, include
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('adm/', include('admin_honeypot.urls', namespace='admin_honeypot')),
+    path('secret-admin-panel/', admin.site.urls),
     path('', include('core.urls',namespace='core')),
     path('', include('accounts.urls',namespace='account')),
     path('', include('post.urls',namespace='post')),
