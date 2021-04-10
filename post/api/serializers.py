@@ -1,8 +1,17 @@
 from rest_framework import serializers
+from accounts.models import User
 from post.models import Post
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username')
+
+
 class PostSerializer(serializers.ModelSerializer):
+    user = serializers.HyperlinkedIdentityField(view_name='post-api:user-detail')
+
     class Meta:
         model = Post
         fields = (
