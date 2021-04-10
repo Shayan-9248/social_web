@@ -9,6 +9,7 @@ from .permissions import (
     AuthorAccessPermission,
     IsSuperUserOrStaffOrPermission
 )
+from rest_framework.permissions import IsAuthenticated
 from .serializers import PostSerializer
 from accounts.models import User
 from post.models import Post
@@ -17,12 +18,13 @@ from post.models import Post
 class PostListAPIView(ListAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    # permission_classes = (IsAuthenticated,)
 
 
 class PostRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = (AuthorAccessPermission,)
+    permission_classes = (AuthorAccessPermission, IsAuthenticated)
 
 
 class PostCreateAPIView(CreateAPIView):
