@@ -5,6 +5,7 @@ from django.contrib.auth.models import (
     Permission,
     _user_get_permissions
 )
+from django.contrib.auth.models import PermissionsMixin
 from django.db.models.signals import post_save
 
 
@@ -36,7 +37,7 @@ class UserManager(BaseUserManager):
         return user
 
 
-class User(AbstractBaseUser):
+class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(
         verbose_name='email address',
         max_length=255,

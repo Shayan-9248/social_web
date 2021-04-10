@@ -8,9 +8,11 @@ urlpatterns = [
     path('', include('core.urls',namespace='core')),
     path('', include('accounts.urls',namespace='account')),
     path('', include('post.urls',namespace='post')),
+    path('api/', include('post.api.urls',namespace='post-api')),
     path('captcha/', include('captcha.urls')),
     path('accounts/', include('allauth.urls')),
     path('ratings/', include('star_ratings.urls', namespace='ratings')),
+    path('api-auth/', include('rest_framework.urls')),
 ]
 
 AdminSite.site_header = 'Social Web Admin'

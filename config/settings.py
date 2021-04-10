@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.github',
     'admin_honeypot',
     'star_ratings',
+    'rest_framework',
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
