@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'django.contrib.sitemaps',
 
     # Local App
     'core.apps.CoreConfig',
@@ -171,3 +172,11 @@ SOCIALACCOUNT_QUERY_EMAIL = True
 # Star Rating
 STAR_RATINGS_STAR_HEIGHT = 17
 STAR_RATINGS_ANONYMOUS = False
+
+# Rest FrameWork
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': [
+#         'rest_framework.authentication.BasicAuthentication',
+#         # 'rest_framework.authentication.SessionAuthentication',
+#     ]
+# }
