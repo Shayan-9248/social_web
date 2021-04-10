@@ -12,3 +12,10 @@ class PostSerializer(serializers.ModelSerializer):
             'description',
         )
         # read_only_fields = ('user',)
+    
+    def validate_title(self, value):
+        filter_list = ['javascript', 'php', 'laravel', 'asp.net']
+
+        for f in filter_list:
+            if f in value:
+                raise serializers.ValidationError("Blog post is not about Django")

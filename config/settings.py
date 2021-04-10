@@ -175,9 +175,9 @@ STAR_RATINGS_STAR_HEIGHT = 17
 STAR_RATINGS_ANONYMOUS = False
 
 # Rest FrameWork
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        # 'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-    ]
-}
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': [
+#         # 'rest_framework.authentication.TokenAuthentication',
+#         # 'rest_framework.authentication.SessionAuthentication',
+#     ]
+# }
