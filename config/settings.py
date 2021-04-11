@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'star_ratings',
     'rest_framework',
     # 'rest_framework.authtoken',
+    'django_filters',
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
@@ -175,9 +176,10 @@ STAR_RATINGS_STAR_HEIGHT = 17
 STAR_RATINGS_ANONYMOUS = False
 
 # Rest FrameWork
-# REST_FRAMEWORK = {
+REST_FRAMEWORK = {
 #     'DEFAULT_AUTHENTICATION_CLASSES': [
 #         # 'rest_framework.authentication.TokenAuthentication',
 #         # 'rest_framework.authentication.SessionAuthentication',
 #     ]
-# }
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+}

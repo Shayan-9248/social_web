@@ -63,6 +63,10 @@ class SignUpForm(UserCreationForm):
     def clean_username(self):
         username = self.cleaned_data['username']
         qs = User.objects.filter(username=username)
+        filter_words = ['*', '%', '@', '$', '#', '^']
+        for f in filter_words:
+            if f in filter_words:
+                raise forms.ValidationError("You can't use this words @#$%^*")
         if qs.exists():
             raise forms.ValidationError('This username is already exists')
         return username

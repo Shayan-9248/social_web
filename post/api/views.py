@@ -8,12 +8,16 @@ from rest_framework.generics import (
 )
 from .permissions import (
     AuthorAccessPermission,
-    IsSuperUserOrStaffOrPermission
+    IsSuperUserOrStaffOrPermission,
 )
 from rest_framework.permissions import IsAuthenticated
 from .serializers import (
     PostSerializer,
-    UserSerializer
+    UserSerializer,
+)
+from rest_framework.filters import (
+    SearchFilter,
+    OrderingFilter,
 )
 from accounts.models import User
 from post.models import Post
@@ -22,7 +26,9 @@ from post.models import Post
 class PostListAPIView(ListAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    # permission_classes = (IsAuthenticated,)
+    filter_backends = (SearchFilter, OrderingFilter)
+    search_fields = ('title', 'description')
+    ordering_fields = ('created',)
 
 
 class PostRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
