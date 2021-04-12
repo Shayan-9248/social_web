@@ -44,8 +44,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         unique=True,
     )
     username = models.CharField(max_length=40)
-    followers = models.ManyToManyField('Relation', blank=True, related_name='followers')
-    followings = models.ManyToManyField('Relation', blank=True, related_name='followings')
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)

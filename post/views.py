@@ -11,6 +11,7 @@ from .mixins import (
 from django.http import JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib import messages
 from django.views import View
 from django.urls import reverse_lazy
 from .models import *
@@ -29,10 +30,13 @@ class PostDetail(View):
 
     def get(self, request, slug, id):
         post = get_object_or_404(Post, slug=slug, id=id)
+        is_fav = False
+        if post.favourite.filter(id=request.user.id).exists():
+            is_fav = True
         ip_address = request.user.ip_address
         if ip_address not in post.visit_count.all():
             post.visit_count.add(ip_address)
-        return render(request, self.template_name, {'post': post})
+        return render(request, self.template_name, {'post': post, 'is_fav': is_fav})
 
 
 def post(request, pk):
@@ -97,3 +101,22 @@ class DeletePost(UserAccessMixin, LoginRequiredMixin, SuccessMessageMixin, Delet
     model = Post
     success_url = reverse_lazy('post:list')
     success_message = 'Post deleted successfully'
+
+
+def add_to_favourite(request, id):
+    post = get_object_or_404(Post, id=id)
+    is_fav = False
+    if post.favourite.filter(id=request.user.id).exists():
+        post.favourite.remove(request.user)
+        is_fav = False
+        messages.success(request, 'Post removed from save list', 'warning')
+    else:
+        post.favourite.add(request.user)
+        is_fav = True  
+        messages.success(request, 'Post added to your save list', 'success')
+    return redirect(request.META.get('HTTP_REFERER'))
+
+
+def favourite_list(request):
+    fav_list = request.user.favourites.all()
+    return render(request, 'post/fav_list.html', {'fav_list': fav_list})

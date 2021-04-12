@@ -1,0 +1,18 @@
+{% extends 'base/base.html' %}
+
+{% block title %} Favourite List {% endblock %}
+
+
+{% block content %}
+    {% for post in fav_list %}
+        <div class="card">
+            <div class="card-header"><a href="{% url 'account:dashboard' post.user.id %}">{{ post.user.username|capfirst }}</a></div>
+            <div class="card-body"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></div>
+        </div>
+        {% if not is_fav %}
+            <a href="{% url 'post:fav' post.id %}" class="btn btn-outline-warning">Remove</a>
+        {% endif %}
+    {% empty %}
+        <p class="alert alert-warning">You don't have any post in your save list</p>
+    {% endfor %}
+{% endblock %}

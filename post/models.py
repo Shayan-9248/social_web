@@ -25,6 +25,7 @@ class Post(TimeStamp):
     like = models.ManyToManyField(User, blank=True, related_name='like')
     dislike = models.ManyToManyField(User, blank=True, related_name='dislike')
     visit_count = models.ManyToManyField(IPAddress, blank=True)
+    favourite = models.ManyToManyField(User, blank=True, related_name='favourites')
 
     def __str__(self):
         return f'{self.user.username} - {self.title[:20]}'

@@ -16,5 +16,11 @@
     <small style="text-align: center;">Views: {{ post.sum_visit_count }}</small>
     <p style="text-align: center;"><a>{{ post.description|linebreaks }}</a></p>
     <a href="{% url 'post:like' post.pk %}" class="btn btn-outline-primary">Like</a> &nbsp; {{ post.like_count }}
-    <a href="{% url 'post:dislike' post.pk %}" class="btn btn-outline-danger">disLike</a> &nbsp; {{ post.dislike_count }}
+    <a href="{% url 'post:dislike' post.pk %}" class="btn btn-outline-danger">disLike</a> &nbsp; {{ post.dislike_count }}<br><br>
+
+    {% if is_fav %}
+        <a href="{% url 'post:fav' post.id %}" class="btn btn-outline-warning">Unsave</a>
+    {% else %}
+        <a href="{% url 'post:fav' post.id %}" class="btn btn-outline-primary">Save</a>
+    {% endif %}
 {% endblock %}

@@ -19,6 +19,8 @@ urlpatterns = [
     path('post-create/', views.PostCreate.as_view(), name='create'),
     path('post-update/<int:pk>/', views.UpdatePost.as_view(), name='update'),
     path('post-delete/<int:pk>/', views.DeletePost.as_view(), name='delete'),
+    path('favourite-post/<int:id>/', views.add_to_favourite, name='fav'),
+    path('favourite-list/', views.favourite_list, name='fav-list'),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps},
          name='django.contrib.sitemaps.views.sitemap')
 ]
