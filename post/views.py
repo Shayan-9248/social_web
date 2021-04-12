@@ -14,7 +14,9 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from django.views import View
 from django.urls import reverse_lazy
+from django.contrib import messages
 from .models import *
+from .forms import *
 
 
 class PostList(View):
@@ -37,6 +39,7 @@ class PostDetail(View):
         if ip_address not in post.visit_count.all():
             post.visit_count.add(ip_address)
         return render(request, self.template_name, {'post': post, 'is_fav': is_fav})
+
 
 
 def post(request, pk):

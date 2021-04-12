@@ -1,0 +1,15 @@
+{% extends 'base/base.html' %}
+
+{% block title %} Saved Post {% endblock %}
+
+
+{% block content %}
+    {% for post in saved_posts %}
+        <div class="card">
+            <div class="card-header"><a href="{% url 'account:dashboard' post.user.id %}">{{ post.user.username|capfirst }}</a></div>
+            <div class="card-body"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></div>
+        </div>
+    {% empty %}
+        <p class="alert alert-warning">You don't saved any post yet..</p>
+    {% endfor %}
+{% endblock %}
