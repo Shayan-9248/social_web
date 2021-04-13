@@ -7,6 +7,7 @@
 {% block content %}
 
     <div class="col-4">
-        {{ profile.user.username }}
+        <p class="alert alert-primary" style="width: 77% !important">Username: {{ profile.user.username }}</p>
+        <p class="alert alert-primary" style="width: 77% !important">Email Address: {{ profile.user.email }}</p>
     </div>
 {% endblock %}

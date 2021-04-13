@@ -6,10 +6,8 @@
 
 {% block content %}
 
-    {% comment %}
         Followers: {{ profile.user.followers_count }}<br>
         Followings: {{ profile.user.following_count }}<br>
-    {% endcomment %}
 
     {% if request.user.username == user.username %}
         <a href="{% url 'post:create' %}" class="btn btn-outline-info btn-sm">Create</a>

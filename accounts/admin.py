@@ -33,14 +33,7 @@ class UserAdmin(BaseUserAdmin):
     filter_horizontal = ()
 
 
-class ProfileAdmin(admin.ModelAdmin):
-    list_display = (
-        'user',
-        # 'following_to_str'
-    )
-
-
 admin.site.register(User, UserAdmin)
 admin.site.unregister(Group)
-admin.site.register(Profile, ProfileAdmin)
+admin.site.register(Profile)
 admin.site.register(Relation)

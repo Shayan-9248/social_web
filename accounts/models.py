@@ -9,6 +9,20 @@ from django.contrib.auth.models import PermissionsMixin
 from django.db.models.signals import post_save
 
 
+class Relation(models.Model):
+    # from_user is who following you
+    from_user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='rel_from_set', null=True, blank=True)
+    # to_user is who you following
+    to_user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='rel_to_set', null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ('-created',)
+
+    def __str__(self):
+        return f'{self.from_user.username} following {self.to_user.username}'
+
+
 class UserManager(BaseUserManager):
     def create_user(self, email, username, password):
         if not email:
@@ -44,6 +58,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_admin = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     permission = models.ManyToManyField(Permission, related_name='users')
+    following = models.ManyToManyField('self', through=Relation, related_name='followers')
 
     objects = UserManager()
 
@@ -52,6 +67,12 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+    def following_count(self):
+        return self.following.count()
+    
+    def followers_count(self):
+        return Relation.objects.filter(to_user=self).count()
 
     def has_perm(self, perm, obj=None):
         return True
@@ -72,20 +93,10 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    following = models.ManyToManyField('self', through='Relation', related_name='following')
     image = models.ImageField()
 
     def __str__(self):
         return f'{self.user.username} | {self.following.username}'
-
-    def following_count(self):
-        return self.following.count()
-    
-    def followers_count(self):
-        return Relation.objects.filter(to_user=self).count()
-
-    # def following_to_str(self):
-    #     return '-'.join([following for following in self.following.all()])
 
 
 def user_profile_save(sender, **kwargs):
@@ -94,15 +105,3 @@ def user_profile_save(sender, **kwargs):
         user_profile.save()
 
 post_save.connect(user_profile_save, sender=User)
-
-
-class Relation(models.Model):
-    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers', null=True, blank=True)
-    to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following', null=True, blank=True)
-    created = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ('-created',)
-
-    def __str__(self):
-        return f'{self.from_user.username} following {self.to_user.username}'

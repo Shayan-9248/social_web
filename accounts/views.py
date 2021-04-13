@@ -111,6 +111,7 @@ class UserDashboard(LoginRequiredMixin, View):
     login_url = 'account:sign-in'
 
     def get(self, request, user_id):
+        profile = Profile.objects.get(user_id=user_id)
         user = get_object_or_404(User, id=user_id)
         posts = Post.objects.filter(user_id=user.id)
         is_following = False
@@ -120,6 +121,7 @@ class UserDashboard(LoginRequiredMixin, View):
         context = {
             'user': user, 'posts': posts,
             'is_following': is_following,
+            'profile': profile
         }
         return render(request, self.template_name, context)
 
@@ -169,7 +171,7 @@ class UserProfile(LoginRequiredMixin, View):
     login_url = 'account:sign-in'
 
     def get(self, request):
-        profile = Profile.objects.get(id=request.user)
+        profile = Profile.objects.get(user_id=request.user.id)
         return render(request, self.template_name, {'profile': profile})
 
 
