@@ -2,6 +2,8 @@ from django.db import models
 from accounts.models import User
 from django.utils.text import slugify
 from django.urls import reverse
+from django.contrib.contenttypes.fields import GenericRelation
+from comment.models import Comment
 
 
 class TimeStamp(models.Model):
@@ -26,6 +28,8 @@ class Post(TimeStamp):
     dislike = models.ManyToManyField(User, blank=True, related_name='dislike')
     visit_count = models.ManyToManyField(IPAddress, blank=True)
     favourite = models.ManyToManyField(User, blank=True, related_name='favourites')
+    comments = GenericRelation(Comment)
+
 
     def __str__(self):
         return f'{self.user.username} - {self.title[:20]}'

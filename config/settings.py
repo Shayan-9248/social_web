@@ -60,9 +60,11 @@ INSTALLED_APPS = [
     'rest_framework',
     # 'rest_framework.authtoken',
     'django_filters',
+    'comment',
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
+LOGIN_URL = 'account:sign-in'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

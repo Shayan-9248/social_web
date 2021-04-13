@@ -37,12 +37,8 @@ class UserManager(BaseUserManager):
         return user
 
 
-class User(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(
-        verbose_name='email address',
-        max_length=255,
-        unique=True,
-    )
+class User(AbstractBaseUser):
+    email = models.EmailField(unique=True)
     username = models.CharField(max_length=40)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
@@ -72,14 +68,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     def get_all_permissions(self, obj=None):
         return _user_get_permissions(self, obj, 'all')
-    
-    # def followers_to_str(self):
-    #     return '-'.join([followers.from_user for followers in self.followers.all()])
-    # followers_to_str.short_description = 'followers'
-    
-    # def followings_to_str(self):
-    #     return '-'.join([followings.to_user for followings in self.followings.all()])
-    # followings_to_str.short_description = 'followings'
 
 
 class Profile(models.Model):

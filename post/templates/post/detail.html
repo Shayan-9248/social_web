@@ -1,5 +1,6 @@
 {% extends 'base/base.html' %}
 {% load ratings %}
+{% load comment_tags %}
 
 {% block title %} {{ post.title }} {% endblock %}
 
@@ -22,5 +23,11 @@
         <a href="{% url 'post:fav' post.id %}" class="btn btn-outline-warning">Unsave</a>
     {% else %}
         <a href="{% url 'post:fav' post.id %}" class="btn btn-outline-primary">Save</a>
-    {% endif %}
+    {% endif %}<br>
+
+    <div class="col-6">
+        {% render_comments post request %}
+        {% include_bootstrap %}
+    </div>
+
 {% endblock %}
