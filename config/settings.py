@@ -61,10 +61,11 @@ INSTALLED_APPS = [
     # 'rest_framework.authtoken',
     'django_filters',
     'comment',
+    'defender',
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
-LOGIN_URL = 'account:sign-in'
+LOGIN_URL = '/account/sign-in/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -75,6 +76,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'post.middleware.IPAddressMiddleware',
+    'defender.middleware.FailedLoginMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -185,3 +187,7 @@ REST_FRAMEWORK = {
 #     ]
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
+
+# Defender 
+DEFENDER_COOLOFF_TIME = '86400'
+DEFENDER_LOCKOUT_TEMPLATE = 'base/defender.html'

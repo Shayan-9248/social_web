@@ -14,8 +14,6 @@ class UserAdmin(BaseUserAdmin):
         'is_active', 
         'is_admin', 
         'is_superuser',
-        # 'followers_to_str',
-        # 'followings_to_str',
     )
     list_filter = ('is_admin',)
     fieldsets = (
@@ -35,7 +33,14 @@ class UserAdmin(BaseUserAdmin):
     filter_horizontal = ()
 
 
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = (
+        'user',
+        # 'following_to_str'
+    )
+
+
 admin.site.register(User, UserAdmin)
 admin.site.unregister(Group)
-admin.site.register(Profile)
+admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Relation)

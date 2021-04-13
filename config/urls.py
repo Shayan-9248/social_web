@@ -5,6 +5,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('adm/', include('admin_honeypot.urls', namespace='admin_honeypot')),
+    path('admin/defender/', include('defender.urls')),
     path('secret-admin-panel/', admin.site.urls),
     path('', include('core.urls',namespace='core')),
     path('', include('accounts.urls',namespace='account')),

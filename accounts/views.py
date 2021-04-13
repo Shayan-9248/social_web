@@ -8,6 +8,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import views as auth_views
+from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.http import JsonResponse
 from .tokens import account_activation_token
@@ -123,6 +124,7 @@ class UserDashboard(LoginRequiredMixin, View):
         return render(request, self.template_name, context)
 
 
+@require_POST
 @login_required(login_url='account:sign-in')
 def follow(request, user_id):
     url = request.META.get('HTTP_REFERER')
@@ -138,6 +140,7 @@ def follow(request, user_id):
     return redirect(url)
 
 
+@require_POST
 @login_required(login_url='account:sign-in')
 def unfollow(request, user_id):
     url = request.META.get('HTTP_REFERER')
@@ -159,6 +162,16 @@ class UserPanel(LoginRequiredMixin, View):
 
     def get(self, request):
         return render(request, self.template_name)
+
+
+class UserProfile(LoginRequiredMixin, View):
+    template_name = 'account/profile.html'
+    login_url = 'account:sign-in'
+
+    def get(self, request):
+        profile = Profile.objects.get(id=request.user)
+        return render(request, self.template_name, {'profile': profile})
+
 
 
 class ChangePassword(LoginRequiredMixin, View):

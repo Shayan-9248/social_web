@@ -37,7 +37,7 @@ class UserManager(BaseUserManager):
         return user
 
 
-class User(AbstractBaseUser):
+class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=40)
     is_active = models.BooleanField(default=True)
@@ -72,10 +72,20 @@ class User(AbstractBaseUser):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    following = models.ManyToManyField('self', through='Relation', related_name='following')
     image = models.ImageField()
 
     def __str__(self):
-        return self.user.username
+        return f'{self.user.username} | {self.following.username}'
+
+    def following_count(self):
+        return self.following.count()
+    
+    def followers_count(self):
+        return Relation.objects.filter(to_user=self).count()
+
+    # def following_to_str(self):
+    #     return '-'.join([following for following in self.following.all()])
 
 
 def user_profile_save(sender, **kwargs):
@@ -87,14 +97,9 @@ post_save.connect(user_profile_save, sender=User)
 
 
 class Relation(models.Model):
-    STATUS = (
-        ('a', 'accept'),
-        ('r', 'reject'),
-    )
-    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='follower', null=True, blank=True)
+    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers', null=True, blank=True)
     to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following', null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=30, choices=STATUS, blank=True)
 
     class Meta:
         ordering = ('-created',)

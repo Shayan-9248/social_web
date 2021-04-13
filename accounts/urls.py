@@ -13,6 +13,7 @@ urlpatterns = [
     path('follow/<int:user_id>/', views.follow, name='follow'),
     path('unfollow/<int:user_id>/', views.unfollow, name='unfollow'),
     path('user-panel/', views.UserPanel.as_view(), name='user-panel'),
+    path('profile/', views.UserProfile.as_view(), name='profile'),
     path('change-password/', views.ChangePassword.as_view(), name='change-pass'),
     path('password-reset/', views.PasswordResetView.as_view(), name='reset'),
     path('password-reset-done/', views.PasswordDoneView.as_view(), name='done'),

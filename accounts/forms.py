@@ -84,9 +84,3 @@ class SignUpForm(UserCreationForm):
         if password != confirm_password:
             raise forms.ValidationError('Passwords must match!')
         return confirm_password
-
-
-class StatusForm(forms.ModelForm):
-    class Meta:
-        model = Relation
-        fields = ('status',)
