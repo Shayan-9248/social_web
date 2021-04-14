@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 from decouple import config
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -181,13 +182,21 @@ STAR_RATINGS_ANONYMOUS = False
 
 # Rest FrameWork
 REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': [
+    'DEFAULT_AUTHENTICATION_CLASSES': [
 #         # 'rest_framework.authentication.TokenAuthentication',
-#         # 'rest_framework.authentication.SessionAuthentication',
-#     ]
-    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+         'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend'
+    ]
 }
 
 # Defender 
 DEFENDER_COOLOFF_TIME = '86400'
 DEFENDER_LOCKOUT_TEMPLATE = 'base/defender.html'
+
+# JWT
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+}
