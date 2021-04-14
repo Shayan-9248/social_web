@@ -54,7 +54,7 @@ class SignInForm(forms.Form):
     captcha = CaptchaField()
 
 
-class SignUpForm(UserCreationForm):
+class SignUpForm(forms.Form):
     username = forms.CharField(error_messages=message, max_length=70, widget=forms.TextInput())
     email = forms.EmailField(error_messages=message, max_length=70, widget=forms.TextInput())
     password = forms.CharField(error_messages={'required': 'This field is required'}, widget=forms.PasswordInput())
@@ -63,10 +63,6 @@ class SignUpForm(UserCreationForm):
     def clean_username(self):
         username = self.cleaned_data['username']
         qs = User.objects.filter(username=username)
-        filter_words = ['*', '%', '@', '$', '#', '^']
-        for f in filter_words:
-            if f in filter_words:
-                raise forms.ValidationError("You can't use this words @#$%^*")
         if qs.exists():
             raise forms.ValidationError('This username is already exists')
         return username

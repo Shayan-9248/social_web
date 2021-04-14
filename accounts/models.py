@@ -96,8 +96,7 @@ class Profile(models.Model):
     image = models.ImageField()
 
     def __str__(self):
-        return f'{self.user.username} | {self.following.username}'
-
+        return f'{self.user.username}'
 
 def user_profile_save(sender, **kwargs):
     if kwargs['created']:

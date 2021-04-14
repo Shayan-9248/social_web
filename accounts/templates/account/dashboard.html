@@ -29,5 +29,7 @@
             <p class="card-header"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a> - {{ post.created|date }}</p>
             <p class="card-body">{{ post.description|truncatewords:20 }}</p>
         </div>
+    {% empty %}
+        <p class="alert alert-warning">You don't have any post yet</p>
     {% endfor %}
 {% endblock %}

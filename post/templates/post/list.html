@@ -4,6 +4,10 @@
 
 
 {% block content %}
+    <form class="form-inline my-2 my-lg-0">
+        {{ form }}
+        <input type="submit" class="btn btn-outline-success" value="Go!">
+      </form>
     {% for post in posts %}
         <div class="card">
             <div class="card-header"><a href="{% url 'account:dashboard' post.user.id %}">{{ post.user.username|capfirst }}</a></div>
