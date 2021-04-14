@@ -1,6 +1,12 @@
 from rest_framework import serializers
+from drf_dynamic_fields import DynamicFieldsMixin
 from accounts.models import User
 from post.models import Post
+
+
+# class UsernameField(serializers.RelatedField):
+#     def to_representation(self, value):
+#         return value.username
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -9,8 +15,16 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('id', 'username')
 
 
-class PostSerializer(serializers.ModelSerializer):
-    user = serializers.HyperlinkedIdentityField(view_name='post-api:user-detail')
+class PostSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
+    def get_username(self, obj):
+        return {
+            'email': obj.user.email,
+            'username': obj.user.username
+        }
+
+    user = serializers.SerializerMethodField('get_username')
+    # user = serializers.CharField(source='user.username', read_only=True)
+    # user = serializers.HyperlinkedIdentityField(view_name='post-api:user-detail')
 
     class Meta:
         model = Post
