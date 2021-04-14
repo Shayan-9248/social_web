@@ -12,13 +12,11 @@ from django.http import JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from accounts.models import User
-from django.db.models import Q
 from django.contrib import messages
 from django.views import View
 from django.urls import reverse_lazy
 from django.contrib import messages
 from .models import *
-from .forms import *
 
 
 class PostList(View):
@@ -26,17 +24,8 @@ class PostList(View):
 
     def get(self, request):
         posts = Post.objects.all()
-        form = SearchForm()
-        if 'search' in request.GET:
-            form = SearchForm(request.GET)
-            if form.is_valid():
-                data = form.cleaned_data['search']
-                posts = posts.filter(
-                    Q(user__username__contains=data)
-                )
         context = {
             'posts': posts,
-            'form': form
         }
         return render(request, self.template_name, context)
 

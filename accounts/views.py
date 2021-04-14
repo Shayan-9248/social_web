@@ -14,14 +14,11 @@ from django.http import JsonResponse
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage
 from django.urls import reverse, reverse_lazy
+from django.db.models import Q
 from django.views import View
 from post.models import Post
 from .forms import *
 from .models import *
-# from .mixins import (
-#     # FollowerAcceptMixin
-# )
-
 
 class SignIn(View):
     template_name = 'account/sign_in.html'
@@ -215,3 +212,20 @@ class PasswordConfirmView(auth_views.PasswordResetConfirmView):
 
 class PasswordCompleteView(auth_views.PasswordResetCompleteView):
     template_name = 'account/complete.html'
+
+
+def search_user(request):
+    users = User.objects.all()
+    form = SearchForm()
+    if 'search' in request.GET:
+        form = SearchForm(request.GET)
+        if form.is_valid():
+            data = form.cleaned_data['search']
+            users = users.filter(
+                Q(username__contains=data)
+            )
+    context = {
+        'form': form,
+        'users': users
+    }
+    return render(request, 'account/search.html', context)

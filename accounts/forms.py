@@ -80,3 +80,9 @@ class SignUpForm(forms.Form):
         if password != confirm_password:
             raise forms.ValidationError('Passwords must match!')
         return confirm_password
+
+
+class SearchForm(forms.Form):
+    search = forms.CharField(max_length=70, widget=forms.TextInput(attrs={
+        'class': 'form-control'
+    }))

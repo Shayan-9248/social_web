@@ -1,0 +1,16 @@
+{% extends 'base/base.html' %}
+
+{% block title %} Search {% endblock %}
+
+
+{% block content %}
+    <form class="form-inline my-2 my-lg-0">
+        {{ form }}
+        <input type="submit" class="btn btn-outline-success" value="Go!">
+      </form>
+    {% for user in users %}
+        <div class="card">
+            <div class="card-header"><a href="{% url 'account:dashboard' user.id %}">{{ user.username }}</a></div>
+        </div>
+    {% endfor %}
+{% endblock %}
