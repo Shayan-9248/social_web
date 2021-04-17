@@ -9,6 +9,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import views as auth_views
 from django.views.decorators.http import require_POST
+from django.http import HttpResponse
 from django.contrib import messages
 from django.http import JsonResponse
 from .tokens import account_activation_token
@@ -83,7 +84,7 @@ class SignUp(View):
 
 
 class ActiveEmail(View):
-    def get(self, request, uidb64, token):
+    def active_email(self, request, uidb64, token):
         user_id = force_text(urlsafe_base64_decode(uidb64))
         user = User.objects.get(id=user_id)
         if user is not None and account_activation_token.check_token(user, token):
@@ -91,7 +92,7 @@ class ActiveEmail(View):
             user.save()
             return redirect('account:sign-in')
         else:
-            messages.error(request, 'Activation link is invalid', 'error')
+            return HttpResponse('Activation link is invalid!')
 
 
 class Logout(LoginRequiredMixin, View):

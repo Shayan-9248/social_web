@@ -11,6 +11,7 @@ from .mixins import (
 from django.http import JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.decorators import login_required
 from accounts.models import User
 from django.contrib import messages
 from django.views import View
@@ -55,6 +56,7 @@ def post(request, pk):
     })
 
 
+@login_required(login_url='account:sign-in')
 def post_like(request, pk):
     url = request.META.get("HTTP_REFERER")
     user = request.user
@@ -69,6 +71,7 @@ def post_like(request, pk):
     return redirect(url)
 
 
+@login_required(login_url='account:sign-in')
 def post_dislike(request, pk):
     url = request.META.get("HTTP_REFERER")
     user = request.user
@@ -109,6 +112,7 @@ class DeletePost(UserAccessMixin, LoginRequiredMixin, SuccessMessageMixin, Delet
     success_message = 'Post deleted successfully'
 
 
+@login_required(login_url='account:sign-in')
 def add_to_favourite(request, id):
     post = get_object_or_404(Post, id=id)
     is_fav = False
@@ -123,6 +127,7 @@ def add_to_favourite(request, id):
     return redirect(request.META.get('HTTP_REFERER'))
 
 
+@login_required(login_url='account:sign-in')
 def favourite_list(request):
     fav_list = request.user.favourites.all()
     return render(request, 'post/fav_list.html', {'fav_list': fav_list})
