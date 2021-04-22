@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'django_filters',
     'comment',
     'defender',
+    'django_extensions',
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
