@@ -19,4 +19,4 @@
  python3 manage.py migrate
 
 
-######  Everything should be ready! You can run the server via the command (python manage.py runserver) and this site will be available at http://localhost:8000
+*Everything should be ready! You can run the server via the command (python manage.py runserver) and this site will be available at http://localhost:8000*
