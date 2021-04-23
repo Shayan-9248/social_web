@@ -1,6 +1,6 @@
-# Django Social Web
+# Social Web
 
-*This is a social web that you can follow other users and CRUD your own Post*
+*This is a simple social web app that uses **Django** as a backend framework*
 
 
 **Requirements**
