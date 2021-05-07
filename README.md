@@ -5,7 +5,7 @@
 
 **Requirements**
 
-+ Python3.9
++ Python3.9, Django3.1.7
 
 1. Create a virtual enviroment for this project with the command **python3 -m venv venv**.
 
