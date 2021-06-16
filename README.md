@@ -11,6 +11,7 @@
 
 2. Activate venv via the command: __source venv/bin/activate__. if successfully,
  your terminal will now say **venv** at the begining of each line.
+3. You must copy a sample of .env-sample in .env file with **cp .env-sample .env**.
 
 3. install all of the required packages and extensions with **pip3 install -r requirements.txt**.
 
