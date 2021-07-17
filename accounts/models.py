@@ -1,3 +1,4 @@
+# Standard library import
 from django.db import models
 from django.contrib.auth.models import (
     AbstractBaseUser,
@@ -11,9 +12,11 @@ from django.db.models.signals import post_save
 
 class Relation(models.Model):
     # from_user is who following you
-    from_user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='rel_from_set', null=True, blank=True)
+    from_user = models.ForeignKey('User', on_delete=models.CASCADE,
+     related_name='rel_from_set', null=True, blank=True)
     # to_user is who you following
-    to_user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='rel_to_set', null=True, blank=True)
+    to_user = models.ForeignKey('User', on_delete=models.CASCADE,
+     related_name='rel_to_set', null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -93,7 +96,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField()
+    image = models.ImageField(default='1.jpg')
 
     def __str__(self):
         return f'{self.user.username}'

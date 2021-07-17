@@ -1,23 +1,28 @@
+# Standard library import
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic.edit import (
     CreateView,
     UpdateView,
     DeleteView,
 )
-from .mixins import (
-    FormValidMixin,
-    UserAccessMixin
-)
 from django.http import JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.decorators import login_required
-from accounts.models import User
+from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.views import View
 from django.urls import reverse_lazy
 from django.contrib import messages
-from .models import *
+
+# Local import
+from .models import Post, IPAddress
+from .mixins import (
+    FormValidMixin,
+    UserAccessMixin
+)
+
+User = get_user_model()
 
 
 class PostList(View):
@@ -56,7 +61,7 @@ def post(request, pk):
     })
 
 
-@login_required(login_url='account:sign-in')
+@login_required(login_url='account:sign_in')
 def post_like(request, pk):
     url = request.META.get("HTTP_REFERER")
     user = request.user
@@ -71,7 +76,7 @@ def post_like(request, pk):
     return redirect(url)
 
 
-@login_required(login_url='account:sign-in')
+@login_required(login_url='account:sign_in')
 def post_dislike(request, pk):
     url = request.META.get("HTTP_REFERER")
     user = request.user
@@ -88,7 +93,7 @@ def post_dislike(request, pk):
 
 class PostCreate(FormValidMixin, LoginRequiredMixin, SuccessMessageMixin, CreateView):
     template_name = 'post/create.html'
-    login_url = 'account:sign-in'
+    login_url = 'account:sign_in'
     model = Post
     fields = ('title', 'description', 'image')
     success_url = reverse_lazy('post:list')
@@ -97,7 +102,7 @@ class PostCreate(FormValidMixin, LoginRequiredMixin, SuccessMessageMixin, Create
 
 class UpdatePost(FormValidMixin, UserAccessMixin, LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     template_name = 'post/update.html'
-    login_url = 'account:sign-in'
+    login_url = 'account:sign_in'
     model = Post
     fields = ('title', 'description', 'image')
     success_url = reverse_lazy('post:list')
@@ -106,13 +111,13 @@ class UpdatePost(FormValidMixin, UserAccessMixin, LoginRequiredMixin, SuccessMes
 
 class DeletePost(UserAccessMixin, LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     template_name = 'post/delete.html'
-    ogin_url = 'account:sign-in'
+    ogin_url = 'account:sign_in'
     model = Post
     success_url = reverse_lazy('post:list')
     success_message = 'Post deleted successfully'
 
 
-@login_required(login_url='account:sign-in')
+@login_required(login_url='account:sign_in')
 def add_to_favourite(request, id):
     post = get_object_or_404(Post, id=id)
     is_fav = False
@@ -127,7 +132,7 @@ def add_to_favourite(request, id):
     return redirect(request.META.get('HTTP_REFERER'))
 
 
-@login_required(login_url='account:sign-in')
+@login_required(login_url='account:sign_in')
 def favourite_list(request):
     fav_list = request.user.favourites.all()
     return render(request, 'post/fav_list.html', {'fav_list': fav_list})

@@ -1,9 +1,14 @@
+# Standard library import
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm
-from captcha.fields import CaptchaField
 from django import forms
-from .models import *
+
+# 3rd-party import
+from captcha.fields import CaptchaField
+
+# Local import
+from .models import User
 
 
 message = {

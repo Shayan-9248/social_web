@@ -1,4 +1,7 @@
+# Standard library import
 from django.contrib.sitemaps import Sitemap
+
+# Local import
 from .models import Post
 
 class BlogSitemap(Sitemap):

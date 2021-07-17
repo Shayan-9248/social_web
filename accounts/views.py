@@ -1,3 +1,4 @@
+# Standard library import
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -12,14 +13,24 @@ from django.views.decorators.http import require_POST
 from django.http import HttpResponse
 from django.contrib import messages
 from django.http import JsonResponse
-from .tokens import account_activation_token
 from django.core.mail import EmailMessage
 from django.urls import reverse, reverse_lazy
 from django.db.models import Q
 from django.views import View
+
+# Local import
 from post.models import Post
-from .forms import *
-from .models import *
+from .forms import (
+    SignInForm,
+    SignUpForm,
+    SearchForm,
+)
+from .models import (
+    User,
+    Relation,
+    Profile,
+)
+from .tokens import account_activation_token
 
 class SignIn(View):
     template_name = 'account/sign_in.html'
@@ -69,7 +80,7 @@ class SignUp(View):
             user.save()
             uidb64 = urlsafe_base64_encode(force_bytes(user.id))
             domain = get_current_site(request).domain
-            url = reverse('account:active-mail', kwargs={'uidb64': uidb64, 'token': account_activation_token.make_token(user)})
+            url = reverse('account:active_mail', kwargs={'uidb64': uidb64, 'token': account_activation_token.make_token(user)})
             link = 'http://' + domain + url
             email = EmailMessage(
                 'Activate your blog account',
@@ -79,7 +90,7 @@ class SignUp(View):
             )
             email.send(fail_silently=False)
             messages.success(request, 'Please confirm your email address to complete the registration', 'success')
-            return redirect('account:sign-in')
+            return redirect('account:sign_in')
         return render(request, self.template_name, {'form': form})
 
 
@@ -90,13 +101,13 @@ class ActiveEmail(View):
         if user is not None and account_activation_token.check_token(user, token):
             user.is_active = True
             user.save()
-            return redirect('account:sign-in')
+            return redirect('account:sign_in')
         else:
             return HttpResponse('Activation link is invalid!')
 
 
 class Logout(LoginRequiredMixin, View):
-    login_url = 'account/sign-in'
+    login_url = 'account/sign_in'
 
     def get(self, request):
         logout(request)
@@ -106,7 +117,7 @@ class Logout(LoginRequiredMixin, View):
 
 class UserDashboard(LoginRequiredMixin, View):
     template_name = 'account/dashboard.html'
-    login_url = 'account:sign-in'
+    login_url = 'account:sign_in'
 
     def get(self, request, user_id):
         profile = Profile.objects.get(user_id=user_id)
@@ -125,7 +136,7 @@ class UserDashboard(LoginRequiredMixin, View):
 
 
 @require_POST
-@login_required(login_url='account:sign-in')
+@login_required(login_url='account:sign_in')
 def follow(request, user_id):
     url = request.META.get('HTTP_REFERER')
     user = get_object_or_404(User, id=user_id)
@@ -141,7 +152,7 @@ def follow(request, user_id):
 
 
 @require_POST
-@login_required(login_url='account:sign-in')
+@login_required(login_url='account:sign_in')
 def unfollow(request, user_id):
     url = request.META.get('HTTP_REFERER')
     user = get_object_or_404(User, id=user_id)
@@ -158,7 +169,7 @@ def unfollow(request, user_id):
 
 class UserPanel(LoginRequiredMixin, View):
     template_name = 'account/user_panel.html'
-    login_url = 'account:sign-in'
+    login_url = 'account:sign_in'
 
     def get(self, request):
         return render(request, self.template_name)
@@ -166,7 +177,7 @@ class UserPanel(LoginRequiredMixin, View):
 
 class UserProfile(LoginRequiredMixin, View):
     template_name = 'account/profile.html'
-    login_url = 'account:sign-in'
+    login_url = 'account:sign_in'
 
     def get(self, request):
         profile = Profile.objects.get(user_id=request.user.id)
@@ -176,7 +187,7 @@ class UserProfile(LoginRequiredMixin, View):
 
 class ChangePassword(LoginRequiredMixin, View):
     template_name = 'account/change_password.html'
-    login_url = 'account:sign-in'
+    login_url = 'account:sign_in'
     form_class = PasswordChangeForm
 
     def get(self, request):

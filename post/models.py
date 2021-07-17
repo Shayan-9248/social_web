@@ -1,14 +1,23 @@
+# Standard library import
 from django.db import models
-from accounts.models import User
 from django.utils.text import slugify
 from django.urls import reverse
+from django.conf import settings
+from django.contrib.auth import get_user_model
+
+# 3rd-party import
 from django.contrib.contenttypes.fields import GenericRelation
 from comment.models import Comment
 
+User = get_user_model()
+
 
 class TimeStamp(models.Model):
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    updated = models.DateTimeField(auto_now=True, null=True, blank=True)
+
+    class Meta:
+        abstract = True
 
 
 class IPAddress(models.Model):
@@ -19,7 +28,7 @@ class IPAddress(models.Model):
 
 
 class Post(TimeStamp):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=70)
     slug = models.SlugField(unique=True, null=True, blank=True)
     description = models.TextField()
@@ -30,6 +39,8 @@ class Post(TimeStamp):
     favourite = models.ManyToManyField(User, blank=True, related_name='favourites')
     comments = GenericRelation(Comment)
 
+    class Meta(TimeStamp.Meta):
+        ordering = ('-created',)
 
     def __str__(self):
         return f'{self.user.username} - {self.title[:20]}'
@@ -49,3 +60,21 @@ class Post(TimeStamp):
     
     def sum_visit_count(self):
         return self.visit_count.count()
+
+
+class Comment(TimeStamp):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
+        related_name='user_comment')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE,
+     related_name='post_comment')
+    comment = models.TextField()
+    reply = models.ForeignKey('self', on_delete=models.CASCADE,
+     related_name='reply_comment')
+    is_reply = models.BooleanField(default=False)
+    show = models.BooleanField(default=False)
+
+    class Meta(TimeStamp.Meta):
+        ordering = ('-created',)
+
+    def __str__(self):
+        return f'{self.user.username} - {self.post.title}'
