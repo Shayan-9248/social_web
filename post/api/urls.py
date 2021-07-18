@@ -10,4 +10,5 @@ urlpatterns = [
     path('post/create/', views.PostCreateAPIView.as_view(), name='create'),
     path('user/list/', views.UserListAPIView.as_view(), name='user'),
     path('user/detail/<int:pk>/', views.UserRetrieveAPIView.as_view(), name='user-detail'),
+    path('comment-create/', views.CommentCreateAPIView.as_view(), name='comment_create'),
 ]
