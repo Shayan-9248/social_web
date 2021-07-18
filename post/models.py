@@ -5,10 +5,6 @@ from django.urls import reverse
 from django.conf import settings
 from django.contrib.auth import get_user_model
 
-# 3rd-party import
-from django.contrib.contenttypes.fields import GenericRelation
-from comment.models import Comment
-
 User = get_user_model()
 
 
@@ -37,7 +33,6 @@ class Post(TimeStamp):
     dislike = models.ManyToManyField(User, blank=True, related_name='dislike')
     visit_count = models.ManyToManyField(IPAddress, blank=True)
     favourite = models.ManyToManyField(User, blank=True, related_name='favourites')
-    comments = GenericRelation(Comment)
 
     class Meta(TimeStamp.Meta):
         ordering = ('-created',)

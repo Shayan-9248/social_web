@@ -17,7 +17,6 @@ urlpatterns = [
     path('captcha/', include('captcha.urls')),
     path('accounts/', include('allauth.urls')),
     path('ratings/', include('star_ratings.urls', namespace='ratings')),
-    path('comment/', include('comment.urls')),
     path('api/', include('post.api.urls',namespace='post-api')),
     path('api-auth/', include('rest_framework.urls')),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
